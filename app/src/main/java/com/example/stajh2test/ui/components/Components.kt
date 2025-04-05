@@ -31,6 +31,10 @@ import androidx.compose.ui.unit.dp
 import com.example.stajh2test.R
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -166,9 +170,8 @@ fun TextLink(
             .padding(8.dp)
     )
 }
-// Components.kt
 @Composable
-fun AuthScreenHeader(
+fun ScreenHeaderText(
     title: String,
     subtitle: String,
     modifier: Modifier = Modifier
@@ -192,7 +195,7 @@ fun AuthScreenHeader(
 }
 
 @Composable
-fun AuthScreenContainer(
+fun ScreenContainer(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
@@ -207,7 +210,44 @@ fun AuthScreenContainer(
                 .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            content = { content() } // Виправлено тут
+            content = { content() }
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SingleDigitField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    isError: Boolean = false,
+    focusRequester: FocusRequester = FocusRequester(),
+    onNext: () -> Unit = {}
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = { newValue ->
+            // Only accept single digits
+            if (newValue.isEmpty() || (newValue.length == 1 && newValue[0].isDigit())) {
+                onValueChange(newValue)
+                if (newValue.length == 1) {
+                    // Move to next field when a digit is entered
+                    onNext()
+                }
+            }
+        },
+        singleLine = true,
+        textStyle = TextStyle(textAlign = TextAlign.Center),
+        modifier = modifier
+            .padding(horizontal = 4.dp)
+            .focusRequester(focusRequester),
+        shape = RoundedCornerShape(8.dp),
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = Color.LightGray,
+            errorBorderColor = Color.Red
+        )
+    )
 }

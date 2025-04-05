@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.stajh2test.ui.components.AuthScreenContainer
-import com.example.stajh2test.ui.components.AuthScreenHeader
+import com.example.stajh2test.ui.components.ScreenContainer
+import com.example.stajh2test.ui.components.ScreenHeaderText
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
 import com.example.stajh2test.ui.components.MyButton
 import com.example.stajh2test.ui.components.MyInputField
@@ -19,7 +19,6 @@ import com.example.stajh2test.ui.components.MyPasswordField
 import com.example.stajh2test.ui.components.TextLink
 import com.example.stajh2test.ui.states.RegisterUiState
 import com.example.stajh2test.viewmodel.AuthViewModel
-import com.example.stajh2test.viewmodel.Model.RegisterModel
 
 @Composable
 fun RegisterScreen(
@@ -29,8 +28,8 @@ fun RegisterScreen(
 ) {
     val registerState by viewModel.registerModel.registerUiState.collectAsState()
 
-    AuthScreenContainer (modifier = Modifier.padding(horizontal = 16.dp)) {
-        AuthScreenHeader(
+    ScreenContainer (modifier = Modifier.padding(horizontal = 16.dp)) {
+        ScreenHeaderText(
             title = "Create Account",
             subtitle = "Start by Creating an Account"
         )

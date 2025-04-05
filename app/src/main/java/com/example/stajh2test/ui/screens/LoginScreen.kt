@@ -9,11 +9,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.stajh2test.ui.components.AuthScreenContainer
-import com.example.stajh2test.ui.components.AuthScreenHeader
 import com.example.stajh2test.ui.components.MyButton
 import com.example.stajh2test.ui.components.MyInputField
 import com.example.stajh2test.ui.components.MyPasswordField
+import com.example.stajh2test.ui.components.ScreenContainer
+import com.example.stajh2test.ui.components.ScreenHeaderText
 import com.example.stajh2test.ui.components.TextLink
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
 import com.example.stajh2test.viewmodel.AuthViewModel
@@ -27,8 +27,8 @@ fun LoginScreen(
 ) {
     val loginState by viewModel.loginModel.loginUiState.collectAsState()
 
-    AuthScreenContainer {
-        AuthScreenHeader(
+    ScreenContainer {
+        ScreenHeaderText(
             title = "Welcome Back",
             subtitle = "Sign in to continue"
         )

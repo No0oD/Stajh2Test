@@ -12,7 +12,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.stajh2test.ui.screens.ForgotPasswordScreen
 import com.example.stajh2test.ui.screens.HomeScreen
 import com.example.stajh2test.ui.screens.LoginScreen
+import com.example.stajh2test.ui.screens.NewPasswordScreen
 import com.example.stajh2test.ui.screens.RegisterScreen
+import com.example.stajh2test.ui.screens.VerificationScreen
 import com.example.stajh2test.viewmodel.AuthViewModel
 
 // Navigation routes
@@ -21,6 +23,8 @@ sealed class Screen(val route: String) {
     object Register : Screen("register")
     object Home : Screen("home")
     object ForgotPassword : Screen("forgot_password")
+    object Verification : Screen("verification")
+    object NewPassword : Screen("new_password")
 }
 
 @Composable
@@ -38,11 +42,9 @@ fun AppNavHost(
                 viewModel = authViewModel,
                 onLoginSuccess = {
                     navController.navigate(Screen.Home.route) {
-                        // Clear the back stack
                         popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = false
                         }
-                        // Avoid multiple copies of the same destination
                         launchSingleTop = true
                     }
                 },
@@ -60,18 +62,14 @@ fun AppNavHost(
                 viewModel = authViewModel,
                 onRegisterSuccess = {
                     navController.navigate(Screen.Home.route) {
-                        // Clear the back stack
                         popUpTo(navController.graph.findStartDestination().id) {
                             inclusive = false
                         }
-                        // Avoid multiple copies
                         launchSingleTop = true
                     }
                 },
                 onLoginClick = {
-                    // Explicitly navigate to Login screen instead of popping back stack
                     navController.navigate(Screen.Login.route) {
-                        // Avoid multiple copies of the same destination
                         launchSingleTop = true
                     }
                 }
@@ -82,7 +80,6 @@ fun AppNavHost(
             HomeScreen(
                 onLogout = {
                     navController.navigate(Screen.Login.route) {
-                        // Clear the back stack
                         popUpTo(0) {
                             inclusive = true
                         }
@@ -93,8 +90,47 @@ fun AppNavHost(
 
         composable(Screen.ForgotPassword.route) {
             ForgotPasswordScreen(
+                viewModel = authViewModel,
                 onBackClick = {
                     navController.popBackStack()
+                },
+                onVerificationCodeSent = {
+                    // Navigate to verification screen instead of login
+                    navController.navigate(Screen.Verification.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(Screen.Verification.route) {
+            VerificationScreen(
+                viewModel = authViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onVerificationSuccess = {
+                    // Змінено навігацію на NewPasswordScreen
+                    navController.navigate(Screen.NewPassword.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(Screen.NewPassword.route) {
+            NewPasswordScreen(
+                viewModel = authViewModel,
+                onBackClick = {
+                    navController.popBackStack()
+                },
+                onPasswordUpdateSuccess = {
+                    // Навігація на LoginScreen після оновлення пароля
+                    navController.navigate(Screen.Login.route) {
+                        popUpTo(0) { // Очистити весь стек
+                            inclusive = true
+                        }
+                    }
                 }
             )
         }
