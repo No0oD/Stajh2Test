@@ -1,24 +1,18 @@
-package com.example.stajh2test.viewmodel.model
+package com.example.stajh2test.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.stajh2test.model.User
-import com.example.stajh2test.ui.states.RegisterUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import android.util.Patterns
+import com.example.stajh2test.ui.states.RegisterUiState
 
 class RegisterModel : ViewModel() {
-    // Реєстраційний стан
     private val _registerUiState = MutableStateFlow(RegisterUiState())
     val registerUiState: StateFlow<RegisterUiState> = _registerUiState.asStateFlow()
 
-    // Список користувачів (тимчасове сховище)
-    private val users = mutableListOf<User>()
-
-    // Оновлення полів
     fun updateCodeField(code: String) {
         _registerUiState.update { it.copy(code = code, codeError = validateCode(code)) }
         validateRegisterForm()
@@ -41,17 +35,18 @@ class RegisterModel : ViewModel() {
 
     fun updateConfirmPassword(confirmPassword: String) {
         val passwordError = if (confirmPassword != _registerUiState.value.password) {
-            "Passwords do not match"
+            "Паролі не співпадають"
         } else null
 
-        _registerUiState.update { it.copy(
-            confirmPassword = confirmPassword,
-            confirmPasswordError = passwordError
-        )}
+        _registerUiState.update {
+            it.copy(
+                confirmPassword = confirmPassword,
+                confirmPasswordError = passwordError
+            )
+        }
         validateRegisterForm()
     }
 
-    // Перемикання паролів
     fun toggleRegisterPasswordVisibility() {
         _registerUiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
@@ -60,7 +55,27 @@ class RegisterModel : ViewModel() {
         _registerUiState.update { it.copy(confirmPasswordVisible = !it.confirmPasswordVisible) }
     }
 
-    // Валідація форми
+    fun clearErrors() {
+        _registerUiState.update {
+            it.copy(
+                codeError = null,
+                loginError = null,
+                emailError = null,
+                passwordError = null,
+                confirmPasswordError = null,
+                firebaseError = null
+            )
+        }
+    }
+
+    fun setLoading(isLoading: Boolean) {
+        _registerUiState.update { it.copy(isLoading = isLoading) }
+    }
+
+    fun setFirebaseError(error: String?) {
+        _registerUiState.update { it.copy(firebaseError = error) }
+    }
+
     private fun validateRegisterForm() {
         val currentState = _registerUiState.value
         val isFormValid = currentState.codeError == null &&
@@ -77,42 +92,28 @@ class RegisterModel : ViewModel() {
         _registerUiState.update { it.copy(isFormValid = isFormValid) }
     }
 
-    // Реєстрація
-    fun register(callback: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            val state = _registerUiState.value
-            if (state.isFormValid) {
-                users.add(
-                    User(
-                        code = state.code,
-                        login = state.login,
-                        email = state.email,
-                        password = state.password
-                    )
-                )
-                callback(true)
-            } else {
-                callback(false)
-            }
-        }
-    }
-
-    // Валідаційні функції
     private fun validateCode(code: String) = when {
-        code.length < 3 ->"Application code must be at least 3 characters" else -> null
+        code.isEmpty() -> "Код програми не може бути порожнім"
+        code.length < 3 -> "Код повинен містити мінімум 3 символи"
+        else -> null
     }
 
     private fun validateLogin(login: String) = when {
-        login.length < 3 -> "Login must be at least 3 characters" else -> null
+        login.isEmpty() -> "Логін не може бути порожнім"
+        login.length < 3 -> "Логін повинен містити мінімум 3 символи"
+        else -> null
     }
 
-    private fun validateEmail(email: String): String? {
-        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$"
-        return if (!email.matches(emailRegex.toRegex())) "Invalid email format" else null
+    private fun validateEmail(email: String) = when {
+        email.isEmpty() -> "Email не може бути порожнім"
+        !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "Невірний формат email"
+        else -> null
     }
 
     private fun validatePassword(password: String) = when {
-        password.length < 6 ->  "Password must be at least 6 characters" else -> null
+        password.isEmpty() -> "Пароль не може бути порожнім"
+        password.length < 6 -> "Пароль повинен містити мінімум 6 символів"
+        else -> null
     }
 
     fun resetRegisterState() {

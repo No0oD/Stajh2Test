@@ -14,5 +14,7 @@ data class RegisterUiState(
     val confirmPasswordError: String? = null,
     val passwordVisible: Boolean = false,
     val confirmPasswordVisible: Boolean = false,
-    val isFormValid: Boolean = false
+    val isFormValid: Boolean = false,
+    val isLoading: Boolean = false,
+    val firebaseError: String? = null
 )
