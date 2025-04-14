@@ -10,7 +10,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.stajh2test.navigation.AppNavHost
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

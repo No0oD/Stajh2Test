@@ -1,4 +1,4 @@
-package com.example.stajh2test.ui.screens
+package com.example.stajh2test.ui.screens.resetpass
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -13,7 +13,7 @@ import com.example.stajh2test.ui.components.MyPasswordField
 import com.example.stajh2test.ui.components.ScreenContainer
 import com.example.stajh2test.ui.components.ScreenHeaderText
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 @Composable
 fun NewPasswordScreen(

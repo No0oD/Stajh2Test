@@ -1,4 +1,4 @@
-package com.example.stajh2test.ui.screens
+package com.example.stajh2test.ui.screens.resetpass
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -24,7 +23,7 @@ import com.example.stajh2test.ui.components.ScreenContainer
 import com.example.stajh2test.ui.components.ScreenHeaderText
 import com.example.stajh2test.ui.components.SingleDigitField
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 @Composable
 fun VerificationScreen(

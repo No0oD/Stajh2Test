@@ -1,10 +1,9 @@
-package com.example.stajh2test.ui.screens
+package com.example.stajh2test.ui.screens.auth
 
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -17,7 +16,7 @@ import com.example.stajh2test.ui.components.MyButton
 import com.example.stajh2test.ui.components.MyInputField
 import com.example.stajh2test.ui.components.MyPasswordField
 import com.example.stajh2test.ui.components.TextLink
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator

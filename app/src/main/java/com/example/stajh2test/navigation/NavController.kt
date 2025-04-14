@@ -2,20 +2,18 @@ package com.example.stajh2test.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.stajh2test.ui.screens.ForgotPasswordScreen
-import com.example.stajh2test.ui.screens.HomeScreen
-import com.example.stajh2test.ui.screens.LoginScreen
-import com.example.stajh2test.ui.screens.NewPasswordScreen
-import com.example.stajh2test.ui.screens.RegisterScreen
-import com.example.stajh2test.ui.screens.VerificationScreen
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.ui.screens.resetpass.ForgotPasswordScreen
+import com.example.stajh2test.ui.screens.homeMenu.HomeScreen
+import com.example.stajh2test.ui.screens.auth.LoginScreen
+import com.example.stajh2test.ui.screens.resetpass.NewPasswordScreen
+import com.example.stajh2test.ui.screens.auth.RegisterScreen
+import com.example.stajh2test.ui.screens.resetpass.VerificationScreen
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 // Navigation routes
 sealed class Screen(val route: String) {

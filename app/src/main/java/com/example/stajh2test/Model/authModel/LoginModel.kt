@@ -1,4 +1,4 @@
-package com.example.stajh2test.viewmodel.Model
+package com.example.stajh2test.Model.authModel
 
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.launch
 import com.example.stajh2test.ui.states.LoginUiState
 
 

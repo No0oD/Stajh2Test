@@ -1,4 +1,4 @@
-package com.example.stajh2test.ui.screens
+package com.example.stajh2test.ui.screens.homeMenu
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

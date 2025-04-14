@@ -1,12 +1,11 @@
-package com.example.stajh2test.viewmodel
+package com.example.stajh2test.Model.authModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 
-import com.example.stajh2test.viewmodel.Model.ForgotPasswordModel
-import com.example.stajh2test.viewmodel.Model.LoginModel
-import com.example.stajh2test.viewmodel.Model.NewPasswordModel
-import com.example.stajh2test.viewmodel.Model.VerificationModel
+import com.example.stajh2test.Model.resetpassModel.ForgotPasswordModel
+import com.example.stajh2test.Model.resetpassModel.NewPasswordModel
+import com.example.stajh2test.Model.resetpassModel.VerificationModel
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException

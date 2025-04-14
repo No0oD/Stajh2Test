@@ -1,4 +1,4 @@
-package com.example.stajh2test.ui.screens
+package com.example.stajh2test.ui.screens.auth
 
 
 import androidx.compose.foundation.layout.Column
@@ -26,7 +26,7 @@ import com.example.stajh2test.ui.components.ScreenContainer
 import com.example.stajh2test.ui.components.ScreenHeaderText
 import com.example.stajh2test.ui.components.TextLink
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
-import com.example.stajh2test.viewmodel.AuthViewModel
+import com.example.stajh2test.Model.authModel.AuthViewModel
 
 @Composable
 fun LoginScreen(

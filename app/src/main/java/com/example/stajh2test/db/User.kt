@@ -1,4 +1,4 @@
-package com.example.stajh2test.model
+package com.example.stajh2test.db
 
 /**
  Дописати бд
