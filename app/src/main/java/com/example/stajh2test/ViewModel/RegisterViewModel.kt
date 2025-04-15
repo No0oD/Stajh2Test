@@ -1,18 +1,21 @@
-package com.example.stajh2test.Model.authModel
+package com.example.stajh2test.ViewModel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.stajh2test.db.User
+import com.example.stajh2test.repository.FirebaseRepository
 import com.example.stajh2test.ui.states.RegisterUiState
 import com.example.stajh2test.ui.states.ValidationUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
-/**
- * Model class for registration UI state management.
- * Handles validation and state updates for the registration screen.
- */
-class RegisterModel : ViewModel() {
+class RegisterViewModel(
+    private val repository: FirebaseRepository = FirebaseRepository()
+) : ViewModel() {
+
     private val _registerUiState = MutableStateFlow(RegisterUiState())
     val registerUiState: StateFlow<RegisterUiState> = _registerUiState.asStateFlow()
 
@@ -26,7 +29,7 @@ class RegisterModel : ViewModel() {
         validateRegisterForm()
     }
 
-    fun updateRegisterLogin(login: String) {
+    fun updateLoginField(login: String) {
         _registerUiState.update {
             it.copy(
                 login = login,
@@ -39,31 +42,34 @@ class RegisterModel : ViewModel() {
     fun updateEmailField(email: String) {
         _registerUiState.update {
             it.copy(
-                email = email,
-                emailError = ValidationUtils.validateEmail(email)
+                email = email.trim(),
+                emailError = ValidationUtils.validateEmail(email.trim())
             )
         }
         validateRegisterForm()
     }
 
-    fun updateRegisterPassword(password: String) {
+    fun updatePasswordField(password: String) {
+        val currentState = _registerUiState.value
+
+        // If confirm password is not empty, validate it against the new password
+        val confirmPasswordError = if (currentState.confirmPassword.isNotEmpty()) {
+            ValidationUtils.validateConfirmPassword(password, currentState.confirmPassword)
+        } else {
+            currentState.confirmPasswordError
+        }
+
         _registerUiState.update {
             it.copy(
                 password = password,
-                passwordError = ValidationUtils.validatePassword(password)
+                passwordError = ValidationUtils.validatePassword(password),
+                confirmPasswordError = confirmPasswordError
             )
         }
-
-        // Re-validate confirm password if already entered
-        val currentState = _registerUiState.value
-        if (currentState.confirmPassword.isNotEmpty()) {
-            updateConfirmPassword(currentState.confirmPassword)
-        }
-
         validateRegisterForm()
     }
 
-    fun updateConfirmPassword(confirmPassword: String) {
+    fun updateConfirmPasswordField(confirmPassword: String) {
         _registerUiState.update {
             it.copy(
                 confirmPassword = confirmPassword,
@@ -76,7 +82,7 @@ class RegisterModel : ViewModel() {
         validateRegisterForm()
     }
 
-    fun toggleRegisterPasswordVisibility() {
+    fun togglePasswordVisibility() {
         _registerUiState.update { it.copy(passwordVisible = !it.passwordVisible) }
     }
 
@@ -84,25 +90,35 @@ class RegisterModel : ViewModel() {
         _registerUiState.update { it.copy(confirmPasswordVisible = !it.confirmPasswordVisible) }
     }
 
-    fun clearErrors() {
-        _registerUiState.update {
-            it.copy(
-                codeError = null,
-                loginError = null,
-                emailError = null,
-                passwordError = null,
-                confirmPasswordError = null,
-                firebaseError = null
+    fun registerUser(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            _registerUiState.update { it.copy(isLoading = true, firebaseError = null) }
+
+            val currentState = _registerUiState.value
+            val user = User(
+                code = currentState.code,
+                login = currentState.login,
+                email = currentState.email,
+                password = currentState.password
+            )
+
+            val result = repository.registerUser(user)
+
+            result.fold(
+                onSuccess = {
+                    _registerUiState.update { it.copy(isLoading = false) }
+                    onSuccess()
+                },
+                onFailure = { error ->
+                    _registerUiState.update {
+                        it.copy(
+                            isLoading = false,
+                            firebaseError = error.message
+                        )
+                    }
+                }
             )
         }
-    }
-
-    fun setLoading(isLoading: Boolean) {
-        _registerUiState.update { it.copy(isLoading = isLoading) }
-    }
-
-    fun setFirebaseError(error: String?) {
-        _registerUiState.update { it.copy(firebaseError = error) }
     }
 
     private fun validateRegisterForm() {
@@ -121,14 +137,20 @@ class RegisterModel : ViewModel() {
         _registerUiState.update { it.copy(isFormValid = isFormValid) }
     }
 
-    // Get current form values
-    fun getCode() = _registerUiState.value.code
-    fun getLogin() = _registerUiState.value.login
-    fun getEmail() = _registerUiState.value.email
-    fun getPassword() = _registerUiState.value.password
-    fun isFormValid() = _registerUiState.value.isFormValid
+    fun clearErrors() {
+        _registerUiState.update {
+            it.copy(
+                codeError = null,
+                loginError = null,
+                emailError = null,
+                passwordError = null,
+                confirmPasswordError = null,
+                firebaseError = null
+            )
+        }
+    }
 
-    fun resetRegisterState() {
+    fun resetState() {
         _registerUiState.value = RegisterUiState()
     }
 }

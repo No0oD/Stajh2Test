@@ -1,5 +1,6 @@
 package com.example.stajh2test.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -93,7 +94,8 @@ fun AppNavHost(
                     navController.popBackStack()
                 },
                 onVerificationCodeSent = {
-                    // Navigate to verification screen instead of login
+                    // Make sure this navigation happens
+                    Log.d("Navigation", "Navigating to verification screen")
                     navController.navigate(Screen.Verification.route) {
                         launchSingleTop = true
                     }

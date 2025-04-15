@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.example.stajh2test.navigation.AppNavHost
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
 import com.example.stajh2test.Model.authModel.AuthViewModel
+import com.example.stajh2test.ui.states.FirebaseConfigCheck
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,7 +19,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         
         val authViewModel = AuthViewModel()
-        
+
         setContent {
             Stajh2TestTheme {
                 Surface(
