@@ -1,7 +1,9 @@
 package com.example.stajh2test.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,11 +32,27 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.stajh2test.R
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.example.stajh2test.ui.screens.homeMenu.HomeFeature
+import com.example.stajh2test.ui.theme.Stajh2TestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -250,4 +268,97 @@ fun SingleDigitField(
             errorBorderColor = Color.Red
         )
     )
+}
+
+
+@Composable
+fun HomeItem(
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .padding(10.dp)
+            .fillMaxWidth()
+            .height(140.dp)
+            .clickable(onClick = onClick),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.LightGray
+        ),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(5.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.weight(1f)
+                    .padding(top = 30.dp)
+                    .padding(start = 15.dp)
+            ) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = Color.Black
+                )
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.DarkGray
+                )
+            }
+            Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(end = 30.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowForward,
+                        contentDescription = "Arrow Icon",
+                        tint = Color.Black
+                    )
+                }
+            }
+
+        }
+    }
+
+
+@Composable
+fun BottomNavBar(navController: NavController) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .background(Color.LightGray),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        NavItem(text = "Home", onClick = { navController.navigate(HomeFeature.Home.route) })
+        NavItem(text = "Feature 1", onClick = { navController.navigate(HomeFeature.HomeFun1.route) })
+        NavItem(text = "Feature 2", onClick = { navController.navigate(HomeFeature.HomeFun2.route) })
+    }
+}
+
+@Composable
+fun NavItem(text: String, onClick: () -> Unit) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(8.dp),
+        textAlign = TextAlign.Center
+    )
+}
+
+@Preview
+@Composable
+fun ShowHomeItem() {
+    Stajh2TestTheme {
+        HomeItem("Test", "SubText", {})
+    }
 }
