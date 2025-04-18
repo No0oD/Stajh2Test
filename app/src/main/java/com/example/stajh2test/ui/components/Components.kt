@@ -1,5 +1,8 @@
 package com.example.stajh2test.ui.components
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,12 +49,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.stajh2test.ui.screens.homeMenu.HomeFeature
+import com.example.stajh2test.ui.states.NewsItem
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -362,3 +370,52 @@ fun ShowHomeItem() {
         HomeItem("Test", "SubText", {})
     }
 }
+
+
+@Composable
+fun NewsCard(
+    newsItem: NewsItem,
+    onReadMoreClick: (String) -> Unit
+) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(8.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            // Заголовок новини
+            Text(
+                text = newsItem.title,
+                fontWeight = FontWeight.Bold,
+                fontSize = 18.sp,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            // Дата публікації
+            Text(
+                text = newsItem.publishDate,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Кнопка "Детальніше"
+            Button(
+                onClick = { onReadMoreClick(newsItem.url) },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Text("Детальніше")
+            }
+        }
+    }
+}
+
+
+
