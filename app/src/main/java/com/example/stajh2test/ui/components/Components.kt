@@ -40,11 +40,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
@@ -60,7 +62,11 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import com.example.stajh2test.ui.screens.homeMenu.HomeFeature
 import com.example.stajh2test.ui.states.NewsItem
+import com.example.stajh2test.ui.states.Reminder
 import com.example.stajh2test.ui.theme.Stajh2TestTheme
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -418,4 +424,99 @@ fun NewsCard(
 }
 
 
+@Composable
+fun ReminderItem(
+    reminder: Reminder,
+    onDeleteClick: () -> Unit
+) {
+    // Parse date from the reminder
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+    val date = dateFormat.parse(reminder.date)
+    val calendar = Calendar.getInstance().apply { time = date!! }
+
+    // Format date components
+    val dayFormat = SimpleDateFormat("EEE", Locale("uk"))
+    val monthFormat = SimpleDateFormat("MMM", Locale("uk"))
+
+    val dayOfWeek = dayFormat.format(date!!).lowercase()
+    val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH).toString()
+    val month = monthFormat.format(date).lowercase()
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(8.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Date section
+            Column(
+                modifier = Modifier.width(80.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = dayOfWeek,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = dayOfMonth,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = month,
+                    fontSize = 14.sp
+                )
+            }
+
+            // Vertical divider
+            Divider(
+                modifier = Modifier
+                    .height(64.dp)
+                    .width(1.dp)
+                    .padding(horizontal = 8.dp)
+            )
+
+            // Reminder content
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 8.dp)
+            ) {
+                Text(
+                    text = reminder.title,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = reminder.description,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = reminder.time,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            // Delete button
+            Button(
+                onClick = onDeleteClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                ),
+                modifier = Modifier.padding(start = 8.dp)
+            ) {
+                Text("Delete")
+            }
+        }
+    }
+}
 
